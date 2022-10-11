@@ -34,6 +34,7 @@ namespace mHealthDataTasks
                 strDataToDos = FetchDataAsString(client, mHealthUrlTestDataToDos).Result;
                 if (bTestMode==true) 
                 {
+                    #pragma warning disable CS0162
                     Log.Msg("test mode");
                     Console.WriteLine("\nHere is the raw result for 'employees':\n" + strDataEmployees);
                     Console.WriteLine("\nHere is the raw result for 'departments':\n" + strDataDepartments);
@@ -42,16 +43,19 @@ namespace mHealthDataTasks
                     SaveTestData(strTestDataPath + "\\Json-Employees.txt", strDataEmployees);
                     SaveTestData(strTestDataPath + "\\Json-Departments.txt", strDataDepartments);
                     SaveTestData(strTestDataPath + "\\Json-ToDos.txt", strDataToDos);
+                    #pragma warning restore CS0162
                 }
             }
 
             if (bTestMode == true) 
             {
                 // load the data sets from a local copy, where we could inject values for testing
+                #pragma warning disable CS0162
                 Log.Msg("load local data");
                 strDataEmployees = File.ReadAllText(strTestDataPath + "\\Json-Employees.txt").ToString();
                 strDataDepartments = File.ReadAllText(strTestDataPath + "\\Json-Departments.txt").ToString();
                 strDataToDos = File.ReadAllText(strTestDataPath + "\\Json-ToDos.txt").ToString();
+                #pragma warning restore CS0162
             }
 
             DataStringTrimClean(ref strDataEmployees);
@@ -72,9 +76,11 @@ namespace mHealthDataTasks
 
                 if (bTestMode == true)
                 {
+                    #pragma warning disable CS0162
                     Log.Msg("raw data");
                     Console.WriteLine("\nList of employees, raw data:");
                     DisplayListEmployees(jsonListEmployees);
+                    #pragma warning restore CS0162
                 }
 
                 Log.Msg("empl list no badge");
@@ -185,13 +191,8 @@ namespace mHealthDataTasks
         static int SimpleValidation(string strThisData)
         {
             string strRegExpr = @"\[\{.*:.*\}\]";
-            // string strRegExpr = @"\[abc\]";
-            // string strData = "[{ab:cd}]";
             Match m = Regex.Match(strThisData, strRegExpr, RegexOptions.IgnoreCase);
-            // Match m = Regex.Match(strData, strRegExpr, RegexOptions.IgnoreCase);
-            int result = 0;
-            if (m.Success==true) result=1;
-            return result;
+            return m.Success==true ? 1 : 0;
         }
 
         static void DataStringTrimClean(ref string strThis)
