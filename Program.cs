@@ -12,7 +12,7 @@ namespace mHealthDataTasks
     {
         static void Main(string[] args)
         {
-            Log.Msg("start");
+            Log.Msg("start process");
             string mHealthUrlTestDataRoot = "https://mhealthtechinterview.azurewebsites.net/api";
             string mHealthUrlTestDataEmployees = mHealthUrlTestDataRoot + "/" + "employees";
             string mHealthUrlTestDataDepartments = mHealthUrlTestDataRoot + "/" + "departments";
@@ -58,9 +58,9 @@ namespace mHealthDataTasks
                 #pragma warning restore CS0162
             }
 
-            DataStringTrimClean(ref strDataEmployees);
-            DataStringTrimClean(ref strDataDepartments);
-            DataStringTrimClean(ref strDataToDos);
+            TrimCleanDataString(ref strDataEmployees);
+            TrimCleanDataString(ref strDataDepartments);
+            TrimCleanDataString(ref strDataToDos);
 
             // some level of validation is needed, can't assume the data format is correct
             Log.Msg("validation");
@@ -88,10 +88,12 @@ namespace mHealthDataTasks
                 DisplayListOfEmployeesNoBadgeNumber(ref jsonListEmployees);
 
                 Log.Msg("empl list by dept");
+                PauseAndPromptUser("Press ENTER for next report");
                 Console.WriteLine("\n --------- Employees by Department ---------");
                 DisplayListOfEmployeesByDepartment(ref jsonListEmployees, ref jsonListDepartments);
 
                 Log.Msg("empl list tasks");
+                PauseAndPromptUser("Press ENTER for next report");
                 Console.WriteLine("\n --------- Assigned Tasks by Due Date ---------");
                 DisplayListOfEmployeeTasksByDueDate(ref jsonListEmployees, ref jsonListToDos);
             } else
@@ -101,9 +103,8 @@ namespace mHealthDataTasks
             }
 
             Log.Msg("wait for user");
-            Console.WriteLine("\nPress ENTER to quit.");
-            Console.ReadKey();
-            Log.Msg("end");
+            PauseAndPromptUser("Press ENTER to quit");
+            Log.Msg("end process");
         }
 
         // ======================================================================
@@ -195,7 +196,7 @@ namespace mHealthDataTasks
             return m.Success==true ? 1 : 0;
         }
 
-        static void DataStringTrimClean(ref string strThis)
+        static void TrimCleanDataString(ref string strThis)
         {
             // using pass-by-ref for performance considerations
             strThis = strThis.Replace("\\", "");
@@ -213,7 +214,12 @@ namespace mHealthDataTasks
             int intCount = Directory.GetFiles(strPath, strFileSpec, SearchOption.TopDirectoryOnly).Length;
             return (intCount == intExpectedCount);
         }
-        
+
+        static void PauseAndPromptUser(string strMsg)
+        {
+            Console.WriteLine("\n" + strMsg);
+            Console.ReadKey();
+        }
         static async Task<string> FetchDataAsString(HttpClient thisClient, string thisAddr)
         {
             string response = await thisClient.GetStringAsync(thisAddr);
