@@ -1,4 +1,9 @@
-﻿using System;
+﻿// ======================================================================
+// Filename: Program.cs
+// Orig. Author: Greg S. Lee
+// Description: Programming Assignment for OU mHealth Job Appl.
+// ======================================================================
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
