@@ -110,6 +110,7 @@ namespace mHealthDataTasks
             Log.Msg("wait for user");
             PauseAndPromptUser("Press ENTER to quit");
             Log.Msg("end process");
+            Log.
         }
 
         // ======================================================================
@@ -268,14 +269,23 @@ namespace mHealthDataTasks
             public string lastName { get; set; }
         }
 
-        // ======================================================================
-        // A simple run-time logging utility
-        // ======================================================================
+        /// ======================================================================
+        /// <summary>
+        /// A simple run-time logging class with persistent env strings to
+        /// automatically name the log file from the components of this 
+        /// program name and the system temp folder.
+        /// </summary>
         public static class Log
         {
             static string strTempDir = System.Environment.GetEnvironmentVariable("Temp");
             static string thisProgramName = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
             static string logPath = strTempDir + "\\" + thisProgramName + ".log";
+            /// ======================================================================
+            /// <summary>
+            /// Writes a simple string to a log file with the current 
+            /// date & time prepended.
+            /// </summary>
+            /// <param name="text"></param>
             public static void Msg(string text)
             {
                 using (StreamWriter writer = new StreamWriter(logPath, true))
